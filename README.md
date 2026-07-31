@@ -10,6 +10,8 @@ tek sayfalık, tamamen çalışan, dönüşüm odaklı bir landing page.
 Sayfanın tek işi var: ziyaretçiyi **araç bilgilerini bırakıp WhatsApp'tan fiyat
 istemeye** yönlendirmek.
 
+**🔗 Canlı demo: https://jadeaiapp.github.io/gkm-landing/**
+
 ---
 
 ## Hızlı başlangıç
@@ -100,61 +102,47 @@ tamamen kalkar.
 
 ---
 
-## GitHub Pages'e yayınlama
+## GitHub Pages
 
-Depoda hazır bir GitHub Actions iş akışı var:
-[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
-`main` dalına yapılan her push sonrası site otomatik derlenip yayınlanır.
+Site **yayında**: https://jadeaiapp.github.io/gkm-landing/
 
-### Adım adım
-
-**1. Depoyu oluşturun ve kodu gönderin**
+Yayın tamamen otomatik. `main` dalına yaptığınız her push sonrası
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) çalışır, projeyi
+derler ve Pages'e dağıtır (~40 saniye).
 
 ```bash
-git init
 git add .
-git commit -m "GKM konsept landing page"
-git branch -M main
-git remote add origin https://github.com/KULLANICI-ADINIZ/gkm-landing.git
-git push -u origin main
+git commit -m "değişiklik"
+git push          # gerisi otomatik
 ```
 
-**2. GitHub Pages'i açın**
+Yayın durumunu **Actions** sekmesinden ya da terminalden izleyebilirsiniz:
 
-GitHub'da depo → **Settings** → sol menüden **Pages** →
-**Build and deployment** → **Source** alanını **GitHub Actions** yapın.
-
-> ⚠ "Deploy from a branch" **seçmeyin**. Bu proje derleme gerektiriyor;
-> kaynak dosyalar doğrudan yayınlanamaz.
-
-**3. İlk yayını bekleyin**
-
-**Actions** sekmesinde "GitHub Pages'e yayınla" iş akışı çalışır (~1 dk).
-Yeşile döndüğünde site yayında.
-
-**4. Canlı adres**
-
-```
-https://KULLANICI-ADINIZ.github.io/DEPO-ADI/
+```bash
+gh run watch
 ```
 
-Örnek: `https://canakyildiz.github.io/gkm-landing/`
+### Kurulum bir kez yapıldı
 
-Kullanıcı/organizasyon sayfası (`KULLANICI-ADINIZ.github.io` adlı depo)
-kullanırsanız adres `https://KULLANICI-ADINIZ.github.io/` olur. Her iki durum
-da desteklenir.
+Aşağıdakiler tamamlandı, tekrar yapmanız gerekmiyor:
 
-**5. (Önerilir) Sosyal medya önizlemesi**
+- Depo oluşturuldu ve `main` dalına gönderildi
+- **Settings → Pages → Source** = **GitHub Actions** olarak ayarlandı
+  ("Deploy from a branch" **değil** — proje derleme gerektiriyor)
+- `.env` içindeki `VITE_SITE_URL` canlı adrese ayarlandı; sosyal medya
+  önizlemesi (WhatsApp, Facebook, X, LinkedIn) doğru çalışıyor
 
-`.env` dosyasındaki adresi canlı adresinizle değiştirin:
+### Depoyu taşırsanız
+
+Başka bir hesaba/isme taşırsanız `.env` dosyasındaki adresi güncelleyip
+yeniden push edin:
 
 ```env
-VITE_SITE_URL=https://KULLANICI-ADINIZ.github.io/gkm-landing/
+VITE_SITE_URL=https://YENI-KULLANICI.github.io/YENI-DEPO/
 ```
 
-Bu değer Open Graph etiketlerinde kullanılır — WhatsApp, Facebook, X ve
-LinkedIn'de bağlantı paylaşıldığında önizleme görseli görünür. Varsayılan `./`
-değeri de çalışır, ancak mutlak adres her platformda daha güvenilirdir.
+Asset yolları göreli olduğu için kod tarafında başka bir değişiklik gerekmez —
+yalnızca Open Graph etiketleri bu değeri kullanır.
 
 ### Alt dizin ve yenileme sorunları neden yok
 
