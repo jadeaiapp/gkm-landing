@@ -40,7 +40,12 @@ http
       return;
     }
 
-    res.writeHead(200, { "content-type": TYPES[path.extname(file)] ?? "application/octet-stream" });
-    fs.createReadStream(file).pipe(res);
+    const body = fs.readFileSync(file);
+    res.writeHead(200, {
+      "content-type": TYPES[path.extname(file)] ?? "application/octet-stream",
+      "content-length": body.length,
+      "cache-control": "no-store",
+    });
+    res.end(body);
   })
   .listen(PORT, () => console.log(`http://localhost:${PORT}${PREFIX}/`));

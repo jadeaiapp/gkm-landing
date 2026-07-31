@@ -1,12 +1,16 @@
 import { business } from "../content/site";
+import { getOpenState } from "../lib/hours";
 import { quickWhatsappUrl } from "../lib/whatsapp";
 import Icon, { type IconName } from "./Icon";
 import Reveal from "./Reveal";
 import SectionHead from "./SectionHead";
 
-const { address, geo } = business;
+const { address } = business;
 
-const MAP_SRC = `https://www.google.com/maps?q=${geo.lat},${geo.lng}&hl=tr&z=16&output=embed`;
+/** İşletme adı + adresle sorgulanır; harita üzerinde işletme adı da görünür. */
+const MAP_SRC = `https://www.google.com/maps?q=${encodeURIComponent(
+  `${business.name}, ${address.line1}, ${address.line2}`,
+)}&hl=tr&z=17&output=embed`;
 
 type Row = { icon: IconName; label: string; value: string; href?: string; external?: boolean };
 
@@ -43,6 +47,8 @@ const ROWS: Row[] = [
 ];
 
 export default function ContactMap() {
+  const state = getOpenState();
+
   return (
     <section id="iletisim" className="band border-t border-edge bg-ink-2">
       <div className="shell">
@@ -53,7 +59,7 @@ export default function ContactMap() {
               Altayçeşme'de, <span className="text-amber">haritada işaretli</span>
             </>
           }
-          lead="Uygulamadan önce atölyeyi görmek isterseniz adres aşağıda. Yol tarifi için harita bağlantısını kullanabilirsiniz."
+          lead="Uygulamadan önce atölyeyi görmek isterseniz adres aşağıda. Pazar dahil her gün açık; yol tarifi için harita bağlantısını kullanabilirsiniz."
         />
 
         <div className="mt-14 grid gap-6 lg:grid-cols-12 lg:gap-8">
@@ -113,11 +119,30 @@ export default function ContactMap() {
               {/* Çalışma saatleri yalnızca teyit edildiğinde görünür. */}
               {business.hours.verified && (
                 <div className="mt-6 border-t border-edge pt-6">
-                  <p className="flex items-center gap-2 text-[0.66rem] font-semibold tracking-[0.18em] text-chrome uppercase">
-                    <Icon name="clock" size={14} className="text-amber" />
-                    Çalışma saatleri
-                  </p>
-                  <dl className="mt-3 space-y-1.5">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="flex items-center gap-2 text-[0.66rem] font-semibold tracking-[0.18em] text-chrome uppercase">
+                      <Icon name="clock" size={14} className="text-amber" />
+                      Çalışma saatleri
+                    </p>
+
+                    <p
+                      className={`flex items-center gap-2 rounded-full border px-2.5 py-1 text-[0.78rem] font-semibold ${
+                        state.open
+                          ? "border-wa/30 bg-wa/10 text-wa"
+                          : "border-edge bg-white/[0.03] text-chrome"
+                      }`}
+                    >
+                      <span
+                        aria-hidden="true"
+                        className={`h-1.5 w-1.5 rounded-full ${
+                          state.open ? "bg-wa" : "bg-chrome"
+                        }`}
+                      />
+                      {state.open ? "Şu anda açık" : "Şu anda kapalı"}
+                    </p>
+                  </div>
+
+                  <dl className="mt-3.5 space-y-1.5">
                     {business.hours.lines.map((h) => (
                       <div key={h.day} className="flex justify-between gap-4 text-[0.9rem]">
                         <dt className="text-chrome">{h.day}</dt>
@@ -125,6 +150,10 @@ export default function ContactMap() {
                       </div>
                     ))}
                   </dl>
+
+                  <p className="mt-3 text-[0.78rem] text-chrome">
+                    {state.detail} · Yayınlanan saatlere göre; resmî tatillerde değişebilir.
+                  </p>
                 </div>
               )}
 

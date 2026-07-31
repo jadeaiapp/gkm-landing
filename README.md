@@ -57,30 +57,46 @@ Aynı dosya sitenin tek içerik merkezidir:
 | Süreç adımları | `steps` |
 | Sık sorulanlar | `faq` |
 | Müşteri yorumları | `testimonials` |
+| Google puanı ve yorum sayısı | `business.googleRating` |
+| Çalışma saatleri | `business.hours` |
 | Ton seçici değerleri | `tintLevels` |
 | Menü | `nav` |
 | Yasal notlar | `disclaimer`, `imageNote` |
 
 Galeri görselleri: `src/content/gallery.ts`
 
-### Doğrulanınca açılacak bölümler
+### Puan, saatler ve yorumlar
 
-Kaynağından teyit edilemeyen bilgiler sayfada **gösterilmiyor**. Teyit
-aldığınızda `verified` alanını `true` yapın, bölüm otomatik görünür:
-
-```ts
-googleRating: { verified: false, score: "4,9", count: 346 },  // → true yapın
-hours:        { verified: false, lines: [...] },              // → true yapın
-```
-
-Gerçek müşteri yorumları geldiğinde `testimonials` dizisine ekleyin — bölüm
-otomatik olarak kayan yorum şeridine dönüşür:
+Bunların tamamı GKM'nin Google işletme kaydından doğrulandı (31 Temmuz 2026) ve
+sayfada yayında:
 
 ```ts
-export const testimonials: Testimonial[] = [
-  { name: "Mert K.", text: "…", source: "Google", rating: 5 },
-];
+googleRating: { verified: true, score: "4,8", count: 493 },
+hours:        { verified: true, lines: [...], schedule: [...] },
 ```
+
+`hours.schedule` ayrıca iletişim bölümündeki **"Şu anda açık / kapalı"** rozetini
+besler; hesaplama İstanbul saatine göre yapılır (`src/lib/hours.ts`).
+
+Yorumlar `testimonials` dizisinde durur. Yeni yorum eklemek için:
+
+```ts
+{
+  name: "Mert K.",          // soyadı baş harfe indirin
+  text: "…",                // uzunsa kısaltın, anlamı değiştirmeyin
+  tag: "Cam filmi",         // kartta görünen hizmet etiketi
+  source: "Google",
+  date: "Haziran 2026",     // göreli değil, mutlak tarih
+  rating: 5,
+}
+```
+
+Dizi boşaltılırsa bölüm otomatik olarak "yorumlar işletme onayı sonrasında
+eklenecektir" notuna ve kanal bağlantılarına döner — kod her iki durumu da
+destekler.
+
+Bir bilgiyi doğrulayamazsanız `verified: false` yapın; ilgili bölüm sayfadan
+tamamen kalkar.
 
 ---
 
@@ -175,7 +191,7 @@ Alan adınızı **Settings → Pages → Custom domain** alanına yazın, ardın
 
 Sayfadaki tüm hareket — hero giriş dizisi, scroll ile açılma, metal parlaması,
 sayaç, kayan şerit, parallaks, lightbox — `src/styles/index.css` ve
-`src/hooks/index.ts` içindeki ~200 satırla yapılıyor. Toplam JS 259 kB
+`src/hooks/index.ts` içindeki ~200 satırla yapılıyor. Toplam JS ~265 kB
 (gzip **~79 kB**); bunun büyük kısmı React'in kendisi.
 
 `prefers-reduced-motion: reduce` tercih eden kullanıcılarda tüm animasyonlar,
@@ -195,7 +211,7 @@ gkm-landing/
 ├─ scripts/
 │  ├─ fetch-assets.mjs            Görselleri indir → kırp → WebP
 │  ├─ fetch-fonts.mjs             Google Fonts woff2 → yerel
-│  ├─ e2e.mjs                     Etkileşim testleri (21 kontrol)
+│  ├─ e2e.mjs                     Etkileşim testleri (24 kontrol)
 │  ├─ a11y.mjs                    Erişilebilirlik denetimi
 │  └─ shots.mjs                   Çoklu cihaz ekran görüntüsü + konsol taraması
 ├─ src/
@@ -203,7 +219,7 @@ gkm-landing/
 │  ├─ content/gallery.ts          Galeri görselleri ve açıklamaları
 │  ├─ components/                 Bölüm bileşenleri
 │  ├─ hooks/index.ts              Scroll, reveal, sayaç, parallaks, odak kilidi
-│  ├─ lib/                        WhatsApp mesajı, telefon biçimi, form durumu
+│  ├─ lib/                        WhatsApp mesajı, telefon/saat biçimi, form durumu
 │  └─ styles/index.css            Tasarım sistemi (tokenlar + bileşen katmanı)
 ├─ RESEARCH.md                    ★ Kaynaklar ve doğrulama dökümü
 └─ index.html                     SEO, Open Graph, JSON-LD
@@ -225,7 +241,7 @@ Testler yerel Chrome'u kullanır (`puppeteer-core`). Farklı bir yol için:
 
 Son çalıştırmada:
 
-- **21/21** etkileşim testi geçti
+- **24/24** etkileşim testi geçti
 - Konsol hatası **yok**, kırık bağlantı **yok**
 - Metin kontrastı: WCAG **AA** — tüm metinler geçti
 - Dokunma hedefleri ≥ 44 px
@@ -262,7 +278,7 @@ GKM kendi fotoğraflarını verdiğinde: dosyaları `src/assets/img/` altına ko
 3. **Ton seçici** — VLT değerinin sürücü görüşüne etkisi (temsilî)
 4. **Uygulamalar** — lightbox'lı galeri
 5. **Neden GKM?** — yalnızca doğrulanabilir maddeler
-6. **Yorumlar** — kaynağına yönlendirme (uydurma yorum yok)
+6. **Yorumlar** — 4,8 puan özeti + 12 gerçek Google yorumu (uydurma yok)
 7. **Sık sorulanlar** — fiyat, süre, PPF/cam filmi farkı
 8. **Fiyat al** — dört adımlık süreç + akıllı form
 9. **İletişim** — adres, harita, telefon, sosyal medya

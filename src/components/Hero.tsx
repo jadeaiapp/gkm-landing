@@ -5,9 +5,14 @@ import Icon from "./Icon";
 
 /** Hero altındaki "ölçü cetveli" — doğrulanmış üç güven bilgisi, çentiklerle. */
 const MARKS = [
+  {
+    icon: "star",
+    label: "Google puanı",
+    value: `${business.googleRating.score} · ${business.googleRating.count} değerlendirme`,
+    href: business.maps,
+  },
   { icon: "badge", label: "Film markası", value: business.brand.claim },
-  { icon: "pin", label: "Konum", value: "Altayçeşme, Maltepe" },
-  { icon: "whatsapp", label: "Fiyat", value: "WhatsApp'tan doğrudan" },
+  { icon: "pin", label: "Konum", value: "Altayçeşme, Maltepe", href: business.maps },
 ] as const;
 
 export default function Hero() {
@@ -45,7 +50,7 @@ export default function Hero() {
 
         {/* ------------------------------------------ Alt satır: söz + görsel */}
         <div className="mt-11 grid gap-10 lg:mt-14 lg:grid-cols-12 lg:items-center lg:gap-12">
-          <div className="lg:col-span-5">
+          <div className="lg:col-span-6">
             <p className="lede rise max-w-[46ch]" style={{ "--i": 6 } as React.CSSProperties}>
               Maltepe Altayçeşme'de oto cam filmi, PPF şeffaf boya koruma ve komple araç
               kaplama. Aracınızın marka ve modelini gönderin, fiyatı WhatsApp'tan
@@ -53,7 +58,7 @@ export default function Hero() {
             </p>
 
             <div
-              className="rise mt-8 flex flex-col gap-3 sm:flex-row sm:items-center"
+              className="rise mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center"
               style={{ "--i": 7 } as React.CSSProperties}
             >
               <a href="#fiyat-al" className="btn btn-primary sm:px-7">
@@ -68,7 +73,7 @@ export default function Hero() {
           </div>
 
           <figure
-            className="rise lg:col-span-7"
+            className="rise lg:col-span-6"
             style={{ "--i": 5 } as React.CSSProperties}
           >
             <div className="chamfer noise relative overflow-hidden rounded-xl border border-edge bg-graphite">
@@ -110,13 +115,33 @@ export default function Hero() {
           <div className="hairline" />
           <dl className="grid grid-cols-1 sm:grid-cols-3">
             {MARKS.map((m) => (
-              <div key={m.label} className="relative pt-5 pb-1 sm:pr-6">
+              <div key={m.label} className="group relative pt-5 pb-1 sm:pr-6">
                 <span aria-hidden="true" className="absolute top-0 left-0 h-2.5 w-px bg-amber/70" />
                 <dt className="flex items-center gap-2 text-[0.68rem] font-semibold tracking-[0.18em] text-chrome uppercase">
                   <Icon name={m.icon} size={14} className="text-amber" />
                   {m.label}
                 </dt>
-                <dd className="mt-1.5 text-[0.95rem] font-medium text-silver">{m.value}</dd>
+                <dd className="mt-1.5 flex items-center gap-1.5 text-[0.95rem] font-medium text-silver transition-colors group-hover:text-white-w">
+                  {m.value}
+                  {"href" in m && m.href && (
+                    <Icon
+                      name="arrow-up-right"
+                      size={13}
+                      className="flex-none text-chrome transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    />
+                  )}
+                </dd>
+
+                {/* Hücrenin tamamı tıklanabilir — dokunma hedefi büyük kalsın. */}
+                {"href" in m && m.href && (
+                  <a
+                    href={m.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${m.label}: ${m.value} — Google Haritalar'da aç`}
+                    className="absolute inset-0 rounded-md sm:right-6"
+                  />
+                )}
               </div>
             ))}
           </dl>

@@ -105,10 +105,14 @@ async function run() {
           font-weight="700" fill="#F5F7FA">Kaputuna koruma.</text>
     <text x="72" y="456" font-family="Segoe UI, Arial, sans-serif" font-size="70"
           font-weight="700" fill="#E8A33D">Gövdesine yeni bir renk.</text>
-    <text x="72" y="534" font-family="Segoe UI, Arial, sans-serif" font-size="26"
+    <text x="72" y="528" font-family="Segoe UI, Arial, sans-serif" font-size="25"
           fill="#C9CED6">Oto cam filmi · PPF boya koruma · Araç kaplama</text>
-    <text x="72" y="576" font-family="Segoe UI, Arial, sans-serif" font-size="26"
-          font-weight="600" fill="#E8A33D">Aracınıza özel fiyat · 0535 965 41 21</text>
+    <text x="72" y="574" font-family="Segoe UI, Arial, sans-serif" font-size="25"
+          font-weight="700" fill="#E8A33D">★ 4,8</text>
+    <text x="146" y="574" font-family="Segoe UI, Arial, sans-serif" font-size="25"
+          fill="#C9CED6">· 493 Google değerlendirmesi</text>
+    <text x="502" y="574" font-family="Segoe UI, Arial, sans-serif" font-size="25"
+          font-weight="600" fill="#F5F7FA">· 0535 965 41 21</text>
   </svg>`;
 
   await sharp(ogBase)
