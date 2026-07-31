@@ -1,0 +1,29 @@
+node_modules
+dist
+dist-ssr
+
+# Gorsel hattinin indirdigi ham dosyalar (yeniden uretilebilir)
+.asset-cache
+
+# Gelistirme sirasinda alinan ekran goruntuleri
+.shots
+
+# Yerel ortam dosyalari - .env surume dahildir, .env.local degildir
+.env.local
+.env.*.local
+
+*.local
+*.log
+npm-debug.log*
+
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.shots-sub
