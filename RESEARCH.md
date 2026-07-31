@@ -42,7 +42,20 @@ alanlar `src/content/site.ts` içinde `verified: false` ile işaretlenir ve sayf
 | Altayçeşme, Uçar Sokak No: 27 / 29 ❌ | haritane.com, firmadan.com, moovitapp.com, turkeyturism.com |
 
 Google işletme kaydından doğrulandı: doğru adres **Adalı Sokağı No: 10**.
-Bazı üçüncü taraf rehberlerdeki "Uçar Sokak" kaydı eski veya hatalı.
+
+**⚠ Bulgu — Google'da iki ayrı GKM kaydı var.** Yayınlanan sitedeki gömülü
+harita, işletme adı + adresle sorgulandığında yan yana iki pin gösteriyor:
+
+| Pin | Not |
+|---|---|
+| **GKM OTO CAM FİLMİ VE ARAÇ KAPLAMA** | Asıl kayıt — 4,8 puan / 493 değerlendirme. Site bu kaydı kullanıyor. |
+| GKM CAM FİLMİ ARAÇ KAPLAMA | Yakınında ikinci bir kayıt. Rehberlerdeki "Uçar Sokak" adresi büyük olasılıkla buradan geliyor. |
+
+Bu, üçüncü taraf rehberlerdeki adres çelişkisini açıklıyor. **İşletme için
+somut bir sorun:** mükerrer Google kayıtları yorumları ve haritadaki görünürlüğü
+ikiye böler, yerel aramada sıralamayı düşürür. Google Business Profile'dan
+"mükerrer kaydı bildir / birleştir" ile kapatılabilir. Satış görüşmesinde
+değerli bir tespit olarak sunulabilir.
 
 ### 2.2 Solar Gard bayilik iddiası hakkında
 
@@ -271,3 +284,5 @@ Doğrulama sonrası kalan liste kısaldı:
 6. **Kaç yıldır faaliyette** — "X yıldır Maltepe'de" güçlü bir güven unsuru.
 7. **Ekip** — "Gökmen Usta ve ekibi" gibi bir ifade kullanılsın mı?
 8. **Resmî tatil kapanışları** — açık/kapalı rozeti tatilleri bilmiyor.
+9. **Mükerrer Google kaydı** — bkz. §2.1. Kapatılması/birleştirilmesi hem
+   yorumları tek yerde toplar hem yerel aramada işletmeyi güçlendirir.
