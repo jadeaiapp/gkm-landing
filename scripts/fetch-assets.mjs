@@ -105,14 +105,20 @@ async function run() {
           font-weight="700" fill="#F5F7FA">Kaputuna koruma.</text>
     <text x="72" y="456" font-family="Segoe UI, Arial, sans-serif" font-size="70"
           font-weight="700" fill="#E8A33D">Gövdesine yeni bir renk.</text>
-    <text x="72" y="528" font-family="Segoe UI, Arial, sans-serif" font-size="25"
+    <text x="72" y="516" font-family="Segoe UI, Arial, sans-serif" font-size="25"
           fill="#C9CED6">Oto cam filmi · PPF boya koruma · Araç kaplama</text>
-    <text x="72" y="574" font-family="Segoe UI, Arial, sans-serif" font-size="25"
+    <text x="72" y="558" font-family="Segoe UI, Arial, sans-serif" font-size="25"
           font-weight="700" fill="#E8A33D">★ 4,8</text>
-    <text x="146" y="574" font-family="Segoe UI, Arial, sans-serif" font-size="25"
+    <text x="146" y="558" font-family="Segoe UI, Arial, sans-serif" font-size="25"
           fill="#C9CED6">· 493 Google değerlendirmesi</text>
-    <text x="502" y="574" font-family="Segoe UI, Arial, sans-serif" font-size="25"
-          font-weight="600" fill="#F5F7FA">· 0535 965 41 21</text>
+
+    <!-- Konsept uyarısı — paylaşımda resmî site izlenimi vermemeli -->
+    <rect x="828" y="56" width="300" height="46" rx="23"
+          fill="#17120A" stroke="#E8A33D" stroke-opacity="0.55" stroke-width="1.5"/>
+    <text x="978" y="86" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif"
+          font-size="18" font-weight="700" letter-spacing="2.4" fill="#E8A33D">KONSEPT ÇALIŞMA</text>
+    <text x="72" y="598" font-family="Segoe UI, Arial, sans-serif" font-size="20"
+          fill="#9AA4B2">Bağımsız konsept çalışma — GKM'nin resmî web sitesi değildir.</text>
   </svg>`;
 
   await sharp(ogBase)

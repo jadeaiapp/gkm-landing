@@ -3,9 +3,11 @@
 Maltepe Altayçeşme'deki **GKM Oto Cam Filmi ve Araç Kaplama** için hazırlanmış,
 tek sayfalık, tamamen çalışan, dönüşüm odaklı bir landing page.
 
-> Bu sayfa GKM için hazırlanmış **bağımsız bir konsept çalışmadır**. GKM'nin
-> resmî web sitesi değildir. Kullanılan bilgilerin kaynakları ve doğrulanamayan
-> alanlar [`RESEARCH.md`](./RESEARCH.md) dosyasında listelenmiştir.
+> ⚠ **Bağımsız konsept çalışma — GKM'nin resmî web sitesi değildir.**
+> Satış görüşmesinde gösterilmek üzere hazırlanmıştır. Site şu anda **demo
+> modunda** yayınlanıyor: arama motorlarına kapalı, işletme yapılandırılmış
+> verisi devre dışı ve sayfanın en üstünde kalıcı bir konsept şeridi var.
+> Kullanılan bilgilerin kaynakları [`RESEARCH.md`](./RESEARCH.md) dosyasında.
 
 Sayfanın tek işi var: ziyaretçiyi **araç bilgilerini bırakıp WhatsApp'tan fiyat
 istemeye** yönlendirmek.
@@ -102,6 +104,76 @@ tamamen kalkar.
 
 ---
 
+## Yayın modları
+
+Proje iki modda çalışacak şekilde kurgulandı. Aralarındaki geçiş birkaç dosyayla
+sınırlıdır; tasarım ve içerik aynı kalır.
+
+### 🟡 Demo modu — şu an aktif
+
+Site GKM'ye sunulmaya hazır, ama internette **resmî GKM sitesi gibi
+davranmıyor**:
+
+| Ne | Nerede | Durum |
+|---|---|---|
+| Konsept şeridi (sayfa başı, kapatılamaz) | `src/content/site.ts` → `demoMode.enabled` | açık |
+| `noindex, nofollow, noarchive, nosnippet, noimageindex` | `index.html` | açık |
+| İşletme JSON-LD (AutoRepair / AggregateRating / saatler) | `docs/schema-localbusiness.json` | **yayında değil** |
+| Sayfa başlığı | "GKM için Hazırlanmış Landing Page Konsepti" | konsept |
+| OG / Twitter kartı | "resmî web sitesi değildir" + görselde **KONSEPT ÇALIŞMA** rozeti | konsept |
+| Footer uyarısı ve "Konsept görsel" etiketleri | bileşenler | açık |
+| Görseller | telifsiz stok (Pexels / Unsplash) | konsept |
+
+**robots.txt hakkında önemli not.** `public/robots.txt` mevcut ve tüm botları
+engelliyor, ancak GitHub Pages projeyi bir **alt dizinde** yayınladığı için
+(`/gkm-landing/`) tarayıcılar bu dosyayı okumaz — robots.txt yalnızca alan adı
+kökünden (`https://jadeaiapp.github.io/robots.txt`) okunur ve orası bu depoya
+ait değil.
+
+Bu bir eksiklik değil: **`noindex` meta etiketi robots.txt'ten daha güçlü bir
+engeldir.** robots.txt yalnızca *taramayı* engeller; engellenen bir adres başka
+bir yerden bağlantı alırsa yine de indekslenebilir. `noindex` ise indekslemeyi
+doğrudan yasaklar. Dosya, niyeti belgelemek ve site ileride özel bir alan adının
+köküne taşınırsa hazır olsun diye depoda tutuluyor.
+
+### 🟢 Resmî yayın modu — GKM onayından sonra
+
+GKM projeyi kabul ederse sırasıyla:
+
+**İçerik ve hukuk**
+
+1. GKM'den **yazılı içerik ve görsel kullanım onayı** alın.
+2. Stok görselleri **GKM'nin kendi uygulama fotoğraflarıyla** değiştirin
+   (bkz. "Görselleri yenileme") ve "Konsept görsel" etiketlerini kaldırın.
+3. **Logo ve marka renklerini** netleştirin; tipografik "GKM" logosunu değiştirin.
+4. **KVKK / gizlilik metni** ekleyin. Form şu anda sunucuya veri göndermiyor,
+   ancak analytics eklendiğinde aydınlatma metni ve gerekiyorsa çerez bildirimi
+   zorunlu hâle gelir.
+5. Google puanı, değerlendirme sayısı ve çalışma saatlerini **yeniden doğrulayın**;
+   `business.verifiedOn` tarihini güncelleyin.
+
+**Teknik**
+
+6. `src/content/site.ts` → `demoMode.enabled = false` — konsept şeridi ve rozet kalkar.
+7. `index.html` → robots etiketlerini `index, follow` yapın (googlebot / bingbot
+   satırlarını silin veya güncelleyin).
+8. `docs/schema-localbusiness.json` içeriğini `index.html` içinde bir
+   `<script type="application/ld+json">` etiketine taşıyın; `url` alanını
+   doldurun, puan ve saatleri güncel değerlerle yazın.
+9. Footer'daki konsept cümlesini (`disclaimer`) ve stok görsel notunu
+   (`imageNote`) kaldırın veya güncelleyin.
+10. **Alan adını bağlayın** (Settings → Pages → Custom domain) ve `.env` içindeki
+    `VITE_SITE_URL` değerini yeni adrese çevirin.
+11. `public/robots.txt` içeriğini `Allow: /` olacak şekilde güncelleyin — alan
+    adı kökünde artık gerçekten okunacaktır.
+12. **Google Search Console** ve **analytics / dönüşüm takibi** kurun; WhatsApp
+    tıklamaları ve form gönderimleri hedef olarak işaretlenmeli.
+13. `npm run test:all` çalıştırın. `test:content` demo modu kontrollerinde
+    başarısız olacaktır — bu beklenen davranıştır; kontrolleri resmî moda göre
+    güncelleyin.
+
+---
+
 ## GitHub Pages
 
 Site **yayında**: https://jadeaiapp.github.io/gkm-landing/
@@ -194,18 +266,23 @@ gkm-landing/
 ├─ .github/workflows/deploy.yml   GitHub Pages otomatik yayın
 ├─ public/
 │  ├─ .nojekyll                   GitHub Pages için gerekli
+│  ├─ robots.txt                  Demo modu — tüm botlara kapalı (alt dizin notu)
 │  ├─ favicon.svg                 Ton skalası logosu
-│  └─ og-gkm.jpg                  Sosyal medya önizleme görseli (1200×630)
+│  └─ og-gkm.jpg                  Sosyal medya kartı — KONSEPT ÇALIŞMA rozetli
+├─ docs/
+│  └─ schema-localbusiness.json   ★ Demo modunda KAPALI işletme JSON-LD verisi
 ├─ scripts/
-│  ├─ fetch-assets.mjs            Görselleri indir → kırp → WebP
+│  ├─ fetch-assets.mjs            Görselleri indir → kırp → WebP + OG kartı
 │  ├─ fetch-fonts.mjs             Google Fonts woff2 → yerel
-│  ├─ e2e.mjs                     Etkileşim testleri (24 kontrol)
+│  ├─ content-check.mjs           site.ts ↔ RESEARCH.md tutarlılığı, demo modu
+│  ├─ e2e.mjs                     Etkileşim + SEO + bağlantı testleri (48 kontrol)
 │  ├─ a11y.mjs                    Erişilebilirlik denetimi
-│  └─ shots.mjs                   Çoklu cihaz ekran görüntüsü + konsol taraması
+│  ├─ shots.mjs                   7 cihazda ekran görüntüsü + konsol taraması
+│  └─ serve-subpath.mjs           GitHub Pages alt dizin benzetimi
 ├─ src/
 │  ├─ content/site.ts             ★ TÜM içerik ve işletme bilgisi
 │  ├─ content/gallery.ts          Galeri görselleri ve açıklamaları
-│  ├─ components/                 Bölüm bileşenleri
+│  ├─ components/                 Bölüm bileşenleri (ConceptBar = konsept şeridi)
 │  ├─ hooks/index.ts              Scroll, reveal, sayaç, parallaks, odak kilidi
 │  ├─ lib/                        WhatsApp mesajı, telefon/saat biçimi, form durumu
 │  └─ styles/index.css            Tasarım sistemi (tokenlar + bileşen katmanı)
@@ -217,24 +294,37 @@ gkm-landing/
 
 ## Kalite kontrolleri
 
+GitHub Pages'in alt dizin davranışını birebir taklit eden yerel sunucuyla
+çalıştırın — asıl doğrulama budur:
+
 ```bash
-npm run build && npm run preview   # önce derleyip önizlemeyi başlatın
-npm run test:e2e                   # form, WhatsApp, lightbox, mobil menü
-npm run test:a11y                  # kontrast, dokunma hedefi, etiketler
-npm run test:shots                 # 5 cihazda ekran görüntüsü + konsol hataları
+npm run build
+npm run serve:subpath              # http://localhost:4400/gkm-landing/
+
+SHOT_URL="http://localhost:4400/gkm-landing/" npm run test:all
+```
+
+Tek tek:
+
+```bash
+npm run test:content   # site.ts ↔ RESEARCH.md tutarlılığı + demo modu kontrolleri
+npm run test:e2e       # form, WhatsApp, lightbox, mobil menü, SEO, bağlantılar
+npm run test:a11y      # kontrast, dokunma hedefi, etiketler
+npm run test:shots     # 7 cihazda ekran görüntüsü + konsol/taşma taraması
 ```
 
 Testler yerel Chrome'u kullanır (`puppeteer-core`). Farklı bir yol için:
 `CHROME_PATH="..." npm run test:e2e`
 
-Son çalıştırmada:
+Son çalıştırmada (canlı GitHub Pages adresine karşı):
 
-- **24/24** etkileşim testi geçti
-- Konsol hatası **yok**, kırık bağlantı **yok**
-- Metin kontrastı: WCAG **AA** — tüm metinler geçti
-- Dokunma hedefleri ≥ 44 px
-- 360 / 390 / 834 / 1440 / 1920 px'te **yatay taşma yok**
-- İlk CTA mobilde kaydırmadan görünür
+- **32/32** içerik tutarlılık kontrolü
+- **48/48** etkileşim testi — form akışı, WhatsApp mesajı, konsept şeridi,
+  noindex, JSON-LD yokluğu, dış bağlantı hedefleri, ölü çapa taraması
+- Erişilebilirlik **10/10** — WCAG AA kontrast, ≥ 44 px dokunma hedefleri
+- 360 / 390 / 430 / 768 / 1024 / 1440 / 1920 px'te **yatay taşma yok**,
+  konsol hatası **yok**
+- İlk CTA her mobil genişlikte kaydırmadan görünür
 
 ---
 

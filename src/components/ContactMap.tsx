@@ -151,8 +151,9 @@ export default function ContactMap() {
                     ))}
                   </dl>
 
-                  <p className="mt-3 text-[0.78rem] text-chrome">
-                    {state.detail} · Yayınlanan saatlere göre; resmî tatillerde değişebilir.
+                  <p className="mt-3 text-[0.78rem] leading-relaxed text-chrome">
+                    {state.detail} · Saatler {business.verifiedOn} tarihinde Google işletme
+                    kaydından alındı; resmî tatillerde değişebilir.
                   </p>
                 </div>
               )}

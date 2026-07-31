@@ -140,12 +140,20 @@ check(
 /* --- 9. Mobil sabit çubuk ------------------------------------------------- */
 await page.evaluate(() => window.scrollTo({ top: 1400, behavior: "instant" }));
 await new Promise((r) => setTimeout(r, 500));
-const barVisible = await page.evaluate(() => {
-  const bar = document.querySelector('a[href^="tel:"]')?.closest("div.fixed");
-  if (!bar) return false;
-  return bar.getBoundingClientRect().bottom <= window.innerHeight + 2;
+const mobileBar = await page.evaluate(() => {
+  // Sabit alt çubuk: ekranın altına yapışık, telefon + WhatsApp bağlantısı taşır.
+  const bar = document.querySelector("div.fixed.bottom-0");
+  if (!bar) return { ok: false, why: "çubuk yok" };
+  const r = bar.getBoundingClientRect();
+  return {
+    ok: r.bottom <= window.innerHeight + 2 && r.top < window.innerHeight,
+    tel: Boolean(bar.querySelector('a[href^="tel:"]')),
+    wa: Boolean(bar.querySelector('a[href^="https://wa.me/"]')),
+    top: Math.round(r.top),
+  };
 });
-check("Mobil sabit çubuk göründü", barVisible);
+check("Mobil sabit çubuk göründü", mobileBar.ok, `top: ${mobileBar.top}`);
+check("Sabit çubukta ara + WhatsApp var", mobileBar.tel && mobileBar.wa);
 
 /* --- 10. tel: ve wa.me bağlantıları --------------------------------------- */
 const links = await page.$$eval("a[href]", (as) => as.map((a) => a.getAttribute("href")));
@@ -199,6 +207,117 @@ check(
   skip.text === "Fiyat formuna geç" && skip.h >= 40,
   `${skip.text} ${skip.w}×${skip.h}`,
 );
+
+/* --- 13. Demo modu: arama motoru koruması ---------------------------------- */
+await page.setViewport({ width: 1440, height: 900, isMobile: false, hasTouch: false });
+await page.goto(URL, { waitUntil: "domcontentloaded" });
+
+const seo = await page.evaluate(() => ({
+  robots: document.querySelector('meta[name="robots"]')?.content ?? "",
+  title: document.title,
+  desc: document.querySelector('meta[name="description"]')?.content ?? "",
+  ogTitle: document.querySelector('meta[property="og:title"]')?.content ?? "",
+  ogDesc: document.querySelector('meta[property="og:description"]')?.content ?? "",
+  ogSite: document.querySelector('meta[property="og:site_name"]')?.content ?? "",
+  twDesc: document.querySelector('meta[name="twitter:description"]')?.content ?? "",
+  ld: [...document.querySelectorAll('script[type="application/ld+json"]')].map((n) => n.textContent),
+  canonical: document.querySelector('link[rel="canonical"]')?.href ?? "",
+}));
+
+check("robots: noindex", seo.robots.includes("noindex"), seo.robots);
+check("robots: nofollow", seo.robots.includes("nofollow"));
+check("robots: noarchive + nosnippet", seo.robots.includes("noarchive") && seo.robots.includes("nosnippet"));
+check("Başlık konsept olduğunu söylüyor", /konsept/i.test(seo.title), seo.title);
+check("Açıklama konsept olduğunu söylüyor", /konsept/i.test(seo.desc));
+check("OG başlığı konsept", /konsept/i.test(seo.ogTitle), seo.ogTitle);
+check("OG açıklaması 'resmî ... değildir' diyor", /resmî web sitesi değildir/i.test(seo.ogDesc));
+check("OG site adı resmî izlenimi vermiyor", /konsept|değildir/i.test(seo.ogSite), seo.ogSite);
+check("Twitter açıklaması konsept", /değildir/i.test(seo.twDesc));
+check("İşletme JSON-LD yayında değil", seo.ld.length === 0, `${seo.ld.length} adet ld+json`);
+check(
+  "Canonical kendi adresini gösteriyor",
+  seo.canonical.startsWith(new globalThis.URL(URL).origin) &&
+    !/gkm\.(com|com\.tr)/i.test(seo.canonical),
+  seo.canonical,
+);
+
+/* --- 14. Konsept şeridi ---------------------------------------------------- */
+const barTop = await page.evaluate(() => {
+  const p = [...document.querySelectorAll("header p")].find((n) =>
+    n.textContent?.includes("Bağımsız konsept çalışma"),
+  );
+  if (!p) return null;
+  const r = p.getBoundingClientRect();
+  const cs = getComputedStyle(p);
+  return { h: Math.round(r.height), top: Math.round(r.top), color: cs.color, size: cs.fontSize };
+});
+check("Konsept şeridi sayfa başında görünür", Boolean(barTop && barTop.h > 10), JSON.stringify(barTop));
+check("Şerit navigasyondan önce (en üstte)", Boolean(barTop && barTop.top < 40), `top: ${barTop?.top}`);
+
+await page.evaluate(() => window.scrollTo({ top: 1200, behavior: "instant" }));
+await new Promise((r) => setTimeout(r, 800));
+const afterScroll = await page.evaluate(() => {
+  const chip = [...document.querySelectorAll("header span")].find(
+    (n) => n.textContent?.trim() === "Konsept",
+  );
+  const bar = [...document.querySelectorAll("header p")].find((n) =>
+    n.textContent?.includes("Bağımsız konsept çalışma"),
+  );
+  return {
+    chip: Boolean(chip),
+    chipLabel: chip?.getAttribute("aria-label") ?? "",
+    barHeight: bar ? Math.round(bar.getBoundingClientRect().height) : -1,
+  };
+});
+check("Kaydırınca konsept rozeti kalıyor", afterScroll.chip, `rozet: ${afterScroll.chip}`);
+check(
+  "Rozet tam metni ekran okuyucuya veriyor",
+  /resmî web sitesi değildir/i.test(afterScroll.chipLabel),
+  afterScroll.chipLabel,
+);
+
+/* --- 15. Dış bağlantı hedefleri -------------------------------------------- */
+const targets = await page.evaluate(() => {
+  const hrefs = [...document.querySelectorAll("a[href]")].map((a) => a.href);
+  const uniq = [...new Set(hrefs)];
+  return {
+    maps: uniq.filter((h) => h.includes("maps.app.goo.gl")).length,
+    ig: uniq.filter((h) => h.includes("instagram.com/gkmcamfilmiarackaplama")).length,
+    fb: uniq.filter((h) => h.includes("facebook.com/GkmOtoCamFilmi")).length,
+    // Yeni sekmede açılan her bağlantıda rel güvenliği olmalı
+    unsafeBlank: [...document.querySelectorAll('a[target="_blank"]')].filter(
+      (a) => !(a.rel || "").includes("noopener"),
+    ).length,
+    // Sayfa içi çapaların hedefi gerçekten var mı?
+    deadAnchors: [...document.querySelectorAll('a[href^="#"]')]
+      .map((a) => a.getAttribute("href"))
+      .filter((h) => h && h !== "#" && !document.querySelector(h)),
+  };
+});
+check("Google Maps bağlantısı var", targets.maps > 0, `${targets.maps} adet`);
+check("Instagram bağlantısı var", targets.ig > 0, `${targets.ig} adet`);
+check("Facebook bağlantısı var", targets.fb > 0, `${targets.fb} adet`);
+check("Tüm _blank bağlantılarda noopener var", targets.unsafeBlank === 0, `${targets.unsafeBlank} eksik`);
+check(
+  "Ölü sayfa içi çapa yok",
+  targets.deadAnchors.length === 0,
+  targets.deadAnchors.join(", "),
+);
+
+/* --- 16. Konsept uyarısı sayfanın kalıcı parçaları içinde ------------------ */
+const notices = await page.evaluate(() => {
+  const t = document.body.innerText;
+  return {
+    footer: /resmî web sitesi değildir/i.test(document.querySelector("footer")?.innerText ?? ""),
+    stock: /telifsiz stok görsellerdir/i.test(t),
+    conceptCaption: [...document.querySelectorAll("figcaption")].some((n) =>
+      /konsept görsel/i.test(n.textContent ?? ""),
+    ),
+  };
+});
+check("Footer konsept uyarısı duruyor", notices.footer);
+check("Stok görsel notu duruyor", notices.stock);
+check("'Konsept görsel' etiketi duruyor", notices.conceptCaption);
 
 await browser.close();
 

@@ -72,6 +72,9 @@ export default function Testimonials() {
                     {reviews.value.toLocaleString("tr-TR")}
                   </span>{" "}
                   Google değerlendirmesi
+                  <span className="mt-0.5 block text-[0.75rem]">
+                    {business.verifiedOn} itibarıyla
+                  </span>
                 </p>
                 <span className="sr-only">
                   Google puanı: {business.googleRating.score} / 5, {business.googleRating.count}{" "}
@@ -137,8 +140,9 @@ export default function Testimonials() {
             <Reveal>
               <p className="flex items-start gap-2.5 text-sm text-chrome">
                 <Icon name="alert" size={16} className="mt-0.5 flex-none" />
-                Yorumlar 31 Temmuz 2026'da Google işletme sayfasından alındı. Tarihler, Google'ın
-                göreli etiketlerinden ("6 ay önce") mutlak aya çevrildi.
+                Yorumlar, puan ve değerlendirme sayısı {business.verifiedOn} tarihinde GKM'nin
+                Google işletme sayfasından alındı; o tarihten sonra değişmiş olabilir. Yorum
+                tarihleri Google'ın göreli etiketlerinden ("6 ay önce") mutlak aya çevrildi.
               </p>
             </Reveal>
           </div>

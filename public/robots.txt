@@ -1,0 +1,30 @@
+# GKM icin hazirlanmis landing page konsepti
+# Bagimsiz konsept calisma - GKM'nin resmi web sitesi degildir.
+#
+# Bu site arama sonuclarinda yer almamalidir.
+#
+# NOT: Site GitHub Pages'te bir ALT DIZINDE yayinlaniyor
+# (https://jadeaiapp.github.io/gkm-landing/). robots.txt yalnizca alan adi
+# kokunde okundugu icin bu dosya tarayicilar tarafindan DIKKATE ALINMAZ.
+# Asil koruma her sayfadaki <meta name="robots" content="noindex, nofollow">
+# etiketidir - noindex zaten robots.txt'ten daha guclu bir engeldir.
+# Bu dosya niyeti belgelemek ve ozel alan adina tasinma ihtimali icin durur.
+
+User-agent: *
+Disallow: /
+
+# Yapay zeka egitim tarayicilari
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /

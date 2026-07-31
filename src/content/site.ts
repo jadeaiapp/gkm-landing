@@ -11,6 +11,27 @@
    Kaynaklar ve doğrulama notları için: RESEARCH.md
    ========================================================================== */
 
+/* -------------------------------------------------------------- Demo modu
+
+   Bu site GKM'ye satış görüşmesinde gösterilmek üzere hazırlanmış bağımsız bir
+   konsept çalışmadır; GKM'nin resmî sitesi DEĞİLDİR.
+
+   `enabled: true` iken:
+     • Sayfanın en üstünde konsept şeridi görünür
+     • Arama motorları için noindex/nofollow uygulanır (index.html)
+     • İşletme JSON-LD verisi yayında değildir (docs/schema-localbusiness.json)
+
+   GKM projeyi onaylayıp resmî yayına geçilirse `enabled: false` yapın ve
+   README'deki "Resmî yayın modu" adımlarını izleyin.                        */
+
+export const demoMode = {
+  enabled: true,
+  /** Şeritte ve mobil rozette görünen tam metin. */
+  notice: "Bağımsız konsept çalışma — GKM'nin resmî web sitesi değildir.",
+  /** Sayfa kaydırıldığında navigasyonda kalan kısa etiket. */
+  noticeShort: "Konsept",
+} as const;
+
 /* ---------------------------------------------------------------- İşletme */
 
 export const business = {
@@ -50,7 +71,14 @@ export const business = {
     note: "İşletmenin kendi Instagram hesabında belirttiği bayilik bilgisidir.",
   },
 
-  /** Google işletme kaydından okundu (31 Temmuz 2026). */
+  /**
+   * Google işletme kaydındaki bilgilerin okunduğu tarih.
+   * Puan, değerlendirme sayısı ve çalışma saatleri zamanla değişir; bu yüzden
+   * sayfada bu tarihle birlikte gösterilirler.
+   */
+  verifiedOn: "31 Temmuz 2026",
+
+  /** Google işletme kaydından okundu. */
   googleRating: {
     verified: true,
     score: "4,8",

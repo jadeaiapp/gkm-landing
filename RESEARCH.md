@@ -15,6 +15,40 @@ alanlar `src/content/site.ts` içinde `verified: false` ile işaretlenir ve sayf
 
 ---
 
+## 0. Doğrulama günlüğü
+
+| Tarih | Ne yapıldı | Sonuç |
+|---|---|---|
+| **31 Tem 2026** | Açık web araştırması (arama, işletme rehberleri, Instagram, Facebook) | Ad, telefon, sosyal hesaplar ve hizmetler doğrulandı. Adres çelişkili, puan/saat/yorumlar teyit edilemedi — bunlar sitede **gizlendi**. |
+| **31 Tem 2026** | Google işletme kaydından birinci el okuma (proje sahibi tarafından iletildi) | Puan **4,8**, **493** değerlendirme, çalışma saatleri, adres ve 30+ yorum metni doğrulandı. Adres çelişkisi çözüldü. |
+| **31 Tem 2026** | Canlı sitede gömülü harita incelemesi | Google'da **mükerrer GKM kaydı** tespit edildi (bkz. §2.1). |
+| **31 Tem 2026** | **Demo moduna geçiş** | Sayfa arama motorlarına kapatıldı, işletme JSON-LD verisi yayından çıkarıldı, konsept şeridi eklendi (bkz. §9). |
+
+### Bu turda sitede değişen bilgiler
+
+| Alan | Önce | Sonra |
+|---|---|---|
+| Google puanı | gizli (kaynaklar çelişiyordu) | **4,8** — yayında, tarihiyle birlikte |
+| Değerlendirme sayısı | gizli | **493** — yayında, tarihiyle birlikte |
+| Çalışma saatleri | gizli | **Pzt–Cmt 09.00–20.00 · Pazar 13.00–20.00** — yayında |
+| Müşteri yorumları | boş (uydurulmadı) | **12 gerçek Google yorumu** |
+| Harita bağlantısı | uzun Google URL'si | kısa bağlantı `maps.app.goo.gl/SHLDCGDUXv7UgfHC9` |
+| Adres | Adalı Sk. No: 10 (çelişkili not ile) | Adalı Sk. No: 10 — **doğrulandı** |
+| Sayfa başlığı / meta | işletme odaklı | **konsept odaklı** (bkz. §9) |
+| İşletme JSON-LD | yayında | **kaldırıldı** → `docs/schema-localbusiness.json` |
+
+**Zamanla eskiyen bilgiler.** Puan, değerlendirme sayısı ve çalışma saatleri
+değişkendir. Bu yüzden sayfada üç yerde okuma tarihi gösteriliyor: yorum
+bölümündeki puan kartında, yorum şeridinin altındaki notta ve iletişim
+bölümündeki çalışma saatleri altında. Tarih tek yerden yönetilir:
+`src/content/site.ts` → `business.verifiedOn`.
+
+Tutarlılığı otomatik doğrulamak için: `npm run test:content` — bu betik
+`site.ts` içindeki her işletme bilgisinin bu dosyada belgeli olduğunu kontrol
+eder.
+
+---
+
 ## 1. Sitede kullanılan — doğrulanmış bilgiler
 
 | Bilgi | Sitedeki değer | Kaynak | Güven |
@@ -246,7 +280,7 @@ göre; resmî tatillerde değişebilir" notu yer alır.
 
 ---
 
-## 9. Sayfada yer alan yasal not
+## 8.1 Sayfada yer alan yasal not
 
 Footer'da şu ifade yer alır:
 
@@ -255,7 +289,7 @@ Footer'da şu ifade yer alır:
 
 ---
 
-## 10. Kaynak bağlantıları
+## 8.2 Kaynak bağlantıları
 
 - **Google işletme kaydı** — https://maps.app.goo.gl/SHLDCGDUXv7UgfHC9
 - Instagram — https://www.instagram.com/gkmcamfilmiarackaplama/
@@ -268,7 +302,40 @@ Footer'da şu ifade yer alır:
 
 ---
 
-## 11. Satış görüşmesinden önce teyit edilecekler
+## 9. Demo modu — sayfa neden arama motorlarına kapalı
+
+Bu sayfa GKM'nin **resmî sitesi değildir**. Arama motorlarının onu işletmenin
+resmî sitesi sanması hem GKM'ye hem ziyaretçiye zarar verir: yanlış sonuç
+gösterir, gerçek Google işletme kaydıyla rekabet eder ve izinsiz bir temsil
+oluşturur.
+
+Bu yüzden demo süresince:
+
+| Önlem | Uygulama |
+|---|---|
+| İndeksleme | `<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">` (ayrıca googlebot ve bingbot için ayrı etiketler) |
+| İşletme yapılandırılmış verisi | `AutoRepair` JSON-LD **yayından çıkarıldı**; `docs/schema-localbusiness.json` içinde bekliyor |
+| Sayfa başlığı | "GKM için Hazırlanmış Landing Page Konsepti" |
+| Açıklama ve OG/Twitter metinleri | "bağımsız konsept çalışma", "resmî web sitesi değildir" |
+| Sosyal paylaşım görseli | **KONSEPT ÇALIŞMA** rozeti ve alt satırda uyarı |
+| Sayfa üstü | Kapatılamayan konsept şeridi; kaydırınca navigasyonda "Konsept" rozetine dönüşür |
+| Footer | Konsept açıklaması korunuyor |
+| Görseller | Tamamı "Konsept görsel" etiketli |
+| Canonical | Kendi yayın adresini gösterir; hiçbir GKM alan adına işaret etmez |
+
+**robots.txt neden tek başına yeterli olmazdı.** Site GitHub Pages'te bir alt
+dizinde (`/gkm-landing/`) yayınlanıyor; tarayıcılar robots.txt'i yalnızca alan
+adı kökünden okur ve orası bu depoya ait değil. Ayrıca robots.txt yalnızca
+*taramayı* engeller — engellenen bir adres başka bir yerden bağlantı alırsa yine
+indekslenebilir. `noindex` bunu doğrudan yasakladığı için asıl koruma odur.
+`public/robots.txt` niyeti belgelemek ve özel alan adına taşınma ihtimali için
+depoda tutuluyor.
+
+Resmî yayına geçiş adımları: **README.md → Resmî yayın modu**.
+
+---
+
+## 10. Satış görüşmesinden önce teyit edilecekler
 
 Doğrulama sonrası kalan liste kısaldı:
 

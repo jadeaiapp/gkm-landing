@@ -17,7 +17,7 @@ const MARKS = [
 
 export default function Hero() {
   return (
-    <section id="top" className="relative overflow-hidden pt-24 pb-4 lg:pt-32">
+    <section id="top" className="relative overflow-hidden pt-32 pb-4 lg:pt-40">
       {/* Ortam ışığı — tek, ölçülü, kaymayan bir sıcak kaynak */}
       <div
         aria-hidden="true"

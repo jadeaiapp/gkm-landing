@@ -11,7 +11,9 @@ const CHROME =
 const VIEWS = [
   { name: "mobile", width: 390, height: 844, dsf: 2, mobile: true },
   { name: "mobile-sm", width: 360, height: 740, dsf: 2, mobile: true },
-  { name: "tablet", width: 834, height: 1112, dsf: 1, mobile: true },
+  { name: "mobile-lg", width: 430, height: 932, dsf: 2, mobile: true },
+  { name: "tablet", width: 768, height: 1024, dsf: 1, mobile: true },
+  { name: "tablet-lg", width: 1024, height: 1366, dsf: 1, mobile: true },
   { name: "desktop", width: 1440, height: 900, dsf: 1, mobile: false },
   { name: "wide", width: 1920, height: 1080, dsf: 1, mobile: false },
 ];

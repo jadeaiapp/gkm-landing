@@ -1,0 +1,67 @@
+{
+  "_ACIKLAMA": "DEMO MODUNDA YAYINDA DEĞİLDİR. Bu dosya sayfaya dahil edilmez, sunucudan servis edilmez ve build çıktısına girmez. Resmî yayına geçerken bu nesneyi (_ACIKLAMA ve _KONTROL_LISTESI alanları hariç) index.html içinde <script type=\"application/ld+json\"> etiketine yapıştırın. Ayrıntı: README.md → Resmî yayın modu.",
+  "_KONTROL_LISTESI": [
+    "GKM'den yazılı onay alındı mı?",
+    "aggregateRating değerleri o günkü Google verisiyle güncellendi mi?",
+    "openingHoursSpecification hâlâ geçerli mi?",
+    "url alanı gerçek yayın adresiyle dolduruldu mu?",
+    "index.html içindeki robots meta 'index, follow' yapıldı mı?",
+    "content/site.ts → demoMode.enabled = false yapıldı mı?"
+  ],
+
+  "@context": "https://schema.org",
+  "@type": "AutoRepair",
+  "name": "GKM Oto Cam Filmi ve Araç Kaplama",
+  "description": "Maltepe Altayçeşme'de oto cam filmi, şeffaf boya koruma filmi (PPF), komple araç kaplama, carbon kaplama ve far-stop kaplama uygulamaları.",
+  "url": "",
+  "telephone": "+905359654121",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Altayçeşme Mah., Adalı Sk. No: 10",
+    "addressLocality": "Maltepe",
+    "addressRegion": "İstanbul",
+    "postalCode": "34843",
+    "addressCountry": "TR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 40.9277959,
+    "longitude": 29.1318242
+  },
+  "areaServed": "Maltepe, İstanbul",
+  "hasMap": "https://maps.app.goo.gl/SHLDCGDUXv7UgfHC9",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": 493,
+    "bestRating": "5",
+    "worstRating": "1"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "09:00",
+      "closes": "20:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Sunday",
+      "opens": "13:00",
+      "closes": "20:00"
+    }
+  ],
+  "sameAs": [
+    "https://www.instagram.com/gkmcamfilmiarackaplama/",
+    "https://www.facebook.com/GkmOtoCamFilmi/",
+    "https://maps.app.goo.gl/SHLDCGDUXv7UgfHC9"
+  ],
+  "makesOffer": [
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Oto cam filmi" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "PPF şeffaf boya koruma filmi" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Komple araç kaplama" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Carbon kaplama" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Far ve stop kaplama" } },
+    { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cam tavan kaplama" } }
+  ]
+}

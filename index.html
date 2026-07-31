@@ -6,26 +6,46 @@
     <meta name="theme-color" content="#08090B" />
     <meta name="color-scheme" content="dark" />
 
-    <title>GKM Oto Cam Filmi ve Araç Kaplama | Maltepe — Aracınıza Özel Fiyat</title>
+    <!--
+      ====================== DEMO MODU ======================
+      Bu sayfa GKM'ye satış görüşmesinde gösterilmek üzere hazırlanmış BAĞIMSIZ
+      bir konsept çalışmadır; GKM'nin resmî sitesi DEĞİLDİR.
+
+      Bu yüzden arama motorlarına kapalıdır ve işletme yapılandırılmış verisi
+      (schema.org) yayında değildir. Resmî yayına geçiş adımları README.md →
+      "Resmî yayın modu" bölümünde.
+      =======================================================
+    -->
+
+    <title>GKM için Hazırlanmış Landing Page Konsepti</title>
     <meta
       name="description"
-      content="Maltepe Altayçeşme'de oto cam filmi, PPF şeffaf boya koruma ve araç kaplama. 493 Google değerlendirmesinde 4,8 puan. Marka ve modelinizi gönderin, fiyatı WhatsApp'tan alın."
+      content="Bağımsız konsept çalışma. Maltepe'deki GKM Oto Cam Filmi ve Araç Kaplama için hazırlanmış örnek landing page tasarımı — işletmenin resmî web sitesi değildir."
     />
-    <meta name="author" content="GKM Oto Cam Filmi ve Araç Kaplama" />
-    <!-- canonical, yayınlandığı adrese göre main.tsx içinde eklenir -->
-    <meta name="robots" content="index, follow" />
 
-    <!-- Open Graph / Twitter -->
+    <!--
+      Arama motorlarına kapalı.
+
+      `noindex` burada asıl korumadır: robots.txt yalnızca taramayı engeller,
+      indekslemeyi değil. Ayrıca GitHub Pages projeyi alt dizinde yayınladığı
+      için (/gkm-landing/) robots.txt tarayıcılar tarafından okunmaz —
+      robots.txt yine de niyeti belgelemek ve özel alan adına taşınma ihtimali
+      için depoda tutulur. Ayrıntı: README → "Demo modu".
+    -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+    <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet" />
+    <meta name="author" content="Bağımsız konsept çalışma" />
+    <!-- canonical, yayınlandığı gerçek adresten main.tsx içinde eklenir -->
+
+    <!-- Open Graph / Twitter — paylaşımda resmî site izlenimi vermemeli -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="tr_TR" />
-    <meta property="og:site_name" content="GKM Oto Cam Filmi ve Araç Kaplama" />
-    <meta
-      property="og:title"
-      content="GKM Oto Cam Filmi ve Araç Kaplama | Maltepe"
-    />
+    <meta property="og:site_name" content="Konsept çalışma — resmî site değildir" />
+    <meta property="og:title" content="GKM için Hazırlanmış Landing Page Konsepti" />
     <meta
       property="og:description"
-      content="Camına film, kaputuna koruma, gövdesine yeni bir renk. Maltepe Altayçeşme'de cam filmi, PPF ve araç kaplama. 493 Google değerlendirmesinde 4,8 puan — aracınıza özel fiyatı WhatsApp'tan alın."
+      content="Bağımsız konsept çalışma. Maltepe'deki GKM Oto Cam Filmi ve Araç Kaplama için hazırlanmış örnek landing page — GKM'nin resmî web sitesi değildir."
     />
     <meta property="og:url" content="%VITE_SITE_URL%" />
     <meta property="og:image" content="%VITE_SITE_URL%og-gkm.jpg" />
@@ -33,13 +53,13 @@
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="GKM Oto Cam Filmi ve Araç Kaplama — Maltepe"
+      content="GKM için hazırlanmış landing page konsepti — bağımsız konsept çalışma, resmî site değildir"
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="GKM Oto Cam Filmi ve Araç Kaplama | Maltepe" />
+    <meta name="twitter:title" content="GKM için Hazırlanmış Landing Page Konsepti" />
     <meta
       name="twitter:description"
-      content="Cam filmi, PPF boya koruma ve araç kaplama. Aracınıza özel fiyatı WhatsApp'tan alın."
+      content="Bağımsız konsept çalışma — GKM'nin resmî web sitesi değildir."
     />
     <meta name="twitter:image" content="%VITE_SITE_URL%og-gkm.jpg" />
 
@@ -47,86 +67,30 @@
     <link rel="apple-touch-icon" href="./og-gkm.jpg" />
 
     <!--
-      Yapılandırılmış veri.
-      Puan, yorum sayısı ve çalışma saatleri GKM'nin Google işletme kaydından
-      doğrulandı (31 Temmuz 2026). Yalnızca doğrulanabilen alanlar yazıldı —
-      ayrıntı için RESEARCH.md.
+      İŞLETME YAPILANDIRILMIŞ VERİSİ (schema.org) — DEMO MODUNDA KAPALI
+
+      AutoRepair / LocalBusiness, AggregateRating, adres, çalışma saatleri ve
+      hizmet teklifleri içeren JSON-LD verisi bilinçli olarak yayınlanmıyor.
+      Aksi hâlde arama motorları bu sayfayı GKM'nin resmî işletme sitesi olarak
+      değerlendirebilir.
+
+      Hazır JSON şurada duruyor:  docs/schema-localbusiness.json
+      Resmî yayına geçerken içeriğini bir <script type="application/ld+json">
+      etiketine yapıştırın ve puanı/saatleri o günkü değerlerle güncelleyin.
     -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "AutoRepair",
-        "name": "GKM Oto Cam Filmi ve Araç Kaplama",
-        "description": "Maltepe Altayçeşme'de oto cam filmi, şeffaf boya koruma filmi (PPF), komple araç kaplama, carbon kaplama ve far-stop kaplama uygulamaları.",
-        "telephone": "+905359654121",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Altayçeşme Mah., Adalı Sk. No: 10",
-          "addressLocality": "Maltepe",
-          "addressRegion": "İstanbul",
-          "postalCode": "34843",
-          "addressCountry": "TR"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 40.9277959,
-          "longitude": 29.1318242
-        },
-        "areaServed": "Maltepe, İstanbul",
-        "hasMap": "https://maps.app.goo.gl/SHLDCGDUXv7UgfHC9",
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.8",
-          "reviewCount": 493,
-          "bestRating": "5",
-          "worstRating": "1"
-        },
-        "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday",
-              "Saturday"
-            ],
-            "opens": "09:00",
-            "closes": "20:00"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Sunday",
-            "opens": "13:00",
-            "closes": "20:00"
-          }
-        ],
-        "sameAs": [
-          "https://www.instagram.com/gkmcamfilmiarackaplama/",
-          "https://www.facebook.com/GkmOtoCamFilmi/",
-          "https://maps.app.goo.gl/SHLDCGDUXv7UgfHC9"
-        ],
-        "makesOffer": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Oto cam filmi" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "PPF şeffaf boya koruma filmi" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Komple araç kaplama" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Carbon kaplama" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Far ve stop kaplama" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Cam tavan kaplama" } }
-        ]
-      }
-    </script>
   </head>
 
   <body>
     <div id="root"></div>
     <noscript>
       <div style="padding: 2rem; font-family: system-ui; color: #f4f6f9; background: #08090b">
+        <p style="color: #e8a33d; font-weight: 600">
+          Bağımsız konsept çalışma — GKM'nin resmî web sitesi değildir.
+        </p>
         <h1>GKM Oto Cam Filmi ve Araç Kaplama</h1>
         <p>Bu sayfayı görüntülemek için JavaScript'i etkinleştirin.</p>
         <p>
-          Doğrudan iletişim:
+          İşletmenin herkese açık iletişim bilgisi:
           <a style="color: #e8a33d" href="tel:+905359654121">0535 965 41 21</a> —
           Altayçeşme Mah., Adalı Sk. No: 10, 34843 Maltepe / İstanbul
         </p>

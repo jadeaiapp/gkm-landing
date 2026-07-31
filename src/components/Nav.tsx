@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { business, nav } from "../content/site";
+import { business, demoMode, nav } from "../content/site";
 import { useActiveSection, useBodyLock, useScrolled } from "../hooks";
+import ConceptBar from "./ConceptBar";
 import Icon from "./Icon";
 
 const SECTION_IDS = nav.map((n) => n.href);
@@ -11,6 +12,9 @@ export default function Nav() {
   const active = useActiveSection(SECTION_IDS);
 
   useBodyLock(open);
+
+  // Menü açıkken konsept şeridi de açık kalsın; kullanıcı en üstte demektir.
+  const barCollapsed = scrolled && !open;
 
   // Esc menüyü kapatsın; masaüstüne geçişte açık kalmasın.
   useEffect(() => {
@@ -42,19 +46,36 @@ export default function Nav() {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <div className="shell flex items-center justify-between gap-4 py-3.5 lg:py-4">
-          <a
-            href="#top"
-            className="group flex items-baseline gap-2.5 py-3"
-            aria-label={`${business.name} — sayfa başı`}
-          >
-            <span className="font-display text-[1.35rem] leading-none font-extrabold tracking-[0.18em] text-white-w">
-              GKM
-            </span>
-            <span className="hidden text-[0.6rem] leading-none font-semibold tracking-[0.22em] text-chrome uppercase sm:block">
-              Cam Filmi · Kaplama
-            </span>
-          </a>
+        <ConceptBar collapsed={barCollapsed} />
+
+        <div className="shell flex items-center justify-between gap-3 py-3.5 lg:py-4">
+          <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+            <a
+              href="#top"
+              className="group flex items-baseline gap-2.5 py-3"
+              aria-label={`${business.name} — sayfa başı`}
+            >
+              <span className="font-display text-[1.35rem] leading-none font-extrabold tracking-[0.18em] text-white-w">
+                GKM
+              </span>
+              {/* Şerit açıkken alt başlık, kapanınca konsept rozeti görünür. */}
+              {!barCollapsed && (
+                <span className="hidden text-[0.6rem] leading-none font-semibold tracking-[0.22em] text-chrome uppercase sm:block">
+                  Cam Filmi · Kaplama
+                </span>
+              )}
+            </a>
+
+            {demoMode.enabled && barCollapsed && (
+              <span
+                aria-label={demoMode.notice}
+                className="rise flex flex-none items-center gap-1.5 rounded-full border border-amber/30 bg-amber/10 px-2.5 py-1 text-[0.6rem] font-semibold tracking-[0.14em] text-amber uppercase"
+              >
+                <span aria-hidden="true" className="h-1 w-1 rounded-full bg-amber" />
+                {demoMode.noticeShort}
+              </span>
+            )}
+          </div>
 
           <nav aria-label="Ana menü" className="hidden items-center gap-1 lg:flex">
             {nav.map((item) => (
@@ -63,9 +84,7 @@ export default function Nav() {
                 href={item.href}
                 aria-current={active === item.href ? "true" : undefined}
                 className={`rounded-lg px-3 py-3 text-sm font-medium transition-colors ${
-                  active === item.href
-                    ? "text-amber"
-                    : "text-silver hover:text-white-w"
+                  active === item.href ? "text-amber" : "text-silver hover:text-white-w"
                 }`}
               >
                 {item.label}
@@ -73,8 +92,11 @@ export default function Nav() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
-            <a href="#fiyat-al" className="btn btn-primary hidden min-h-11 px-5 text-sm sm:inline-flex">
+          <div className="flex flex-none items-center gap-2">
+            <a
+              href="#fiyat-al"
+              className="btn btn-primary hidden min-h-11 px-5 text-sm sm:inline-flex"
+            >
               Fiyat Al
               <Icon name="arrow-right" size={17} />
             </a>
@@ -91,21 +113,14 @@ export default function Nav() {
             </button>
           </div>
         </div>
-      </header>
 
-      {/* Mobil menü */}
-      <div
-        id="mobil-menu"
-        hidden={!open}
-        className="fixed inset-0 z-40 lg:hidden"
-        onClick={(e) => {
-          if (e.target === e.currentTarget) setOpen(false);
-        }}
-      >
-        <div className="absolute inset-0 bg-ink/70 backdrop-blur-sm" />
+        {/* Mobil menü — başlığın akışında durur, böylece şerit açıkken de
+            doğru yerden başlar (sabit bir üst boşluğa ihtiyaç yok). */}
         <nav
+          id="mobil-menu"
+          hidden={!open}
           aria-label="Mobil menü"
-          className="relative mt-[4.25rem] border-b border-edge bg-graphite px-5 pt-3 pb-6 shadow-2xl"
+          className="max-h-[76dvh] overflow-y-auto overscroll-contain border-t border-edge bg-graphite px-5 pt-3 pb-6 shadow-2xl lg:hidden"
         >
           <ul className="divide-y divide-edge">
             {nav.map((item, i) => (
@@ -123,11 +138,7 @@ export default function Nav() {
             ))}
           </ul>
 
-          <a
-            href="#fiyat-al"
-            onClick={() => setOpen(false)}
-            className="btn btn-primary mt-5 w-full"
-          >
+          <a href="#fiyat-al" onClick={() => setOpen(false)} className="btn btn-primary mt-5 w-full">
             Aracıma Özel Fiyat Al
             <Icon name="arrow-right" size={18} />
           </a>
@@ -141,7 +152,16 @@ export default function Nav() {
             {business.phoneDisplay}
           </a>
         </nav>
-      </div>
+      </header>
+
+      {/* Menü arka planı — başlığın altında, içeriğin üstünde */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40 bg-ink/70 backdrop-blur-sm lg:hidden"
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+      )}
     </>
   );
 }

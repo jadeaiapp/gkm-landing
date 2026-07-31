@@ -12,7 +12,10 @@
     "assets:fonts": "node scripts/fetch-fonts.mjs",
     "test:e2e": "node scripts/e2e.mjs",
     "test:a11y": "node scripts/a11y.mjs",
-    "test:shots": "node scripts/shots.mjs"
+    "test:shots": "node scripts/shots.mjs",
+    "test:content": "node scripts/content-check.mjs",
+    "test:all": "node scripts/content-check.mjs && node scripts/e2e.mjs && node scripts/a11y.mjs && node scripts/shots.mjs",
+    "serve:subpath": "node scripts/serve-subpath.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",
